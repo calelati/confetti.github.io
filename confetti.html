@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🎉 Confetti!</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            min-height: 100vh;
+            background: #ffffff;
+            overflow: hidden;
+        }
+        
+        .confetti {
+            position: fixed;
+            width: 10px;
+            height: 10px;
+            position: absolute;
+        }
+        
+        @keyframes explode {
+            0% {
+                transform: translate(0, 0) rotate(0deg);
+                opacity: 1;
+            }
+            100% {
+                transform: translate(var(--tx), var(--ty)) rotate(720deg);
+                opacity: 0;
+            }
+        }
+    </style>
+</head>
+<body>
+    <script>
+        const colors = ['#ff6b6b', '#4ecdc4', '#45b7d1', '#f7dc6f', '#bb8fce', '#85c1e2', '#f8b739', '#52de97', '#ff85a2', '#ffd93d', '#6bcf7f', '#a29bfe'];
+        
+        function createConfetti(startX, startY) {
+            const confetti = document.createElement('div');
+            confetti.className = 'confetti';
+            
+            // Random explosion direction
+            const angle = Math.random() * Math.PI * 2;
+            const velocity = Math.random() * 500 + 300;
+            const tx = Math.cos(angle) * velocity;
+            const ty = Math.sin(angle) * velocity;
+            
+            confetti.style.left = startX + 'px';
+            confetti.style.top = startY + 'px';
+            confetti.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+            confetti.style.width = (Math.random() * 12 + 6) + 'px';
+            confetti.style.height = (Math.random() * 12 + 6) + 'px';
+            confetti.style.borderRadius = Math.random() > 0.5 ? '50%' : '0';
+            confetti.style.setProperty('--tx', tx + 'px');
+            confetti.style.setProperty('--ty', ty + 'px');
+            confetti.style.animation = `explode ${Math.random() * 1 + 1.5}s ease-out forwards`;
+            
+            document.body.appendChild(confetti);
+            
+            setTimeout(() => confetti.remove(), 3000);
+        }
+        
+        // Create massive explosion from center
+        const centerX = window.innerWidth / 2;
+        const centerY = window.innerHeight / 2;
+        
+        // Initial huge burst
+        for (let i = 0; i < 400; i++) {
+            setTimeout(() => createConfetti(centerX, centerY), Math.random() * 100);
+        }
+        
+        // Secondary waves
+        setTimeout(() => {
+            for (let i = 0; i < 300; i++) {
+                setTimeout(() => createConfetti(centerX, centerY), Math.random() * 200);
+            }
+        }, 150);
+        
+        setTimeout(() => {
+            for (let i = 0; i < 200; i++) {
+                setTimeout(() => createConfetti(centerX, centerY), Math.random() * 200);
+            }
+        }, 400);
+        
+        // Continuous smaller bursts
+        const interval = setInterval(() => {
+            for (let i = 0; i < 15; i++) {
+                createConfetti(centerX, centerY);
+            }
+        }, 200);
+        
+        // Stop after 8 seconds
+        setTimeout(() => clearInterval(interval), 8000);
+    </script>
+</body>
+</html>
